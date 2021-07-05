@@ -1,0 +1,78 @@
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<TicketShop.Domain.StripeSettings> Stripe
+@model TicketShop.Domain.DTO.ShoppingCartDto
+<div class="container">
+    <div class="row m-4">
+        @*<a asp-controller="ShoppingCart" asp-action="Order" class="btn btn-info">Order Now</a>*@
+
+        @if (Model.TotalPrice != 0)
+        {
+            <form asp-controller="ShoppingCart" asp-action="PayOrder" method="post">
+                <article>
+                    <script src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="@Stripe.Value.PublishableKey"
+                            data-locale="auto"
+                            data-description="TicketShop Application Payment"
+                            data-amount="@(Model.TotalPrice * 100)"
+                            data-label="Pay $@Model.TotalPrice">
+                    </script>
+                </article>
+            </form>
+        }
+
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Product Name
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Quantity
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Tickets.Count; i++)
+                {
+                    var item = Model.Tickets[i];
+                    <tr>
+                        <td>
+                            o     @item.Ticket.Movie.MovieName
+                        </td>
+                        <td>
+                            @item.Ticket.TicketPrice
+                        </td>
+                        <td>
+                            @item.Quantity
+                        </td>
+                        <td>
+                            @(item.Ticket.TicketPrice * item.Quantity)
+                        </td>
+                        <td>
+                            <a asp-action="DeleteTicketFromShoppingCart" asp-route-id="@item.Ticket.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total price:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>@Model.TotalPrice</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

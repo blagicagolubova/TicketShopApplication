@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Blagica\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Blagica\\.nuget\\packages"
+    ]
+  }
+}
